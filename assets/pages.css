@@ -1,0 +1,88 @@
+/* Pages annexes de horsevo.app : support, confidentialité, mentions légales, confirmation.
+   Mêmes couleurs et mêmes polices que l'accueil (charte Horsevo, septembre 2026). */
+@font-face{font-family:Poppins;font-weight:300;font-style:normal;font-display:swap;src:url(/assets/fonts/poppins-light-latin.woff2) format("woff2")}
+@font-face{font-family:Poppins;font-weight:600;font-style:normal;font-display:swap;src:url(/assets/fonts/poppins-semibold-latin.woff2) format("woff2")}
+:root{
+  --noir:#0B0B0C; --casse:#F3F6EE; --papier:#F6F6F4; --gris:#8A8A8E; --or:#E1A937;
+  --texte2:#55555A; --trait:rgba(11,11,12,.12);
+  --r:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--papier);color:var(--noir);font-family:Poppins,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  font-weight:300;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--or);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+h1,h2{font-weight:600;letter-spacing:-.035em;line-height:1.04}
+
+/* barre du haut */
+nav{position:sticky;top:0;z-index:20;background:rgba(246,246,244,.84);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+nav a{text-decoration:none}
+.wm{font-size:25px;font-weight:600;letter-spacing:-.03em}
+.wm b{color:var(--or);font-weight:600}
+.links{display:flex;gap:34px;font-size:15.5px;color:var(--texte2)}
+.links a{transition:color .2s}
+.links a:hover{color:var(--noir)}
+.btn{display:inline-flex;align-items:center;background:var(--noir);color:var(--casse);border-radius:999px;padding:11px 22px;font-size:15px;font-weight:600;transition:transform .25s ease}
+.btn:hover{transform:translateY(-1px)}
+
+/* titre de page, sur panneau noir */
+.tete{margin:0 16px;border-radius:var(--r);background:var(--noir);color:var(--casse);padding:104px 0 96px}
+.tete h1{font-size:76px;max-width:900px}
+.tete .gold{color:var(--or)}
+.tete .updated{margin-top:26px;font-size:14.5px;color:var(--gris)}
+.tete .intro{margin-top:24px;font-size:20px;line-height:1.55;color:#A3A3A7;max-width:640px}
+.tete .updated + .intro{margin-top:14px}
+
+/* rubriques : le titre à gauche, le texte à droite */
+.corps{padding-top:34px}
+.corps section{display:grid;grid-template-columns:330px minmax(0,660px);column-gap:80px;padding:50px 0 36px;border-bottom:1px solid var(--trait)}
+.corps section > h2{grid-column:1;grid-row:1 / span 12;font-size:27px;line-height:1.14;letter-spacing:-.03em}
+.corps section > :not(h2){grid-column:2}
+.corps .num{display:block;font-size:14px;font-weight:300;letter-spacing:0;color:var(--gris);margin-bottom:10px}
+.corps p,.corps li{color:var(--texte2)}
+.corps p{margin-bottom:16px}
+.corps b{color:var(--noir);font-weight:600}
+.corps section a{text-decoration:underline;text-decoration-color:rgba(11,11,12,.32);text-underline-offset:3px;color:var(--noir);transition:text-decoration-color .2s}
+.corps section a:hover{text-decoration-color:var(--noir)}
+.corps ul{list-style:none;margin:0 0 18px}
+.corps li{position:relative;padding-left:22px;margin-bottom:10px}
+.corps li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--noir)}
+.corps .pill{color:var(--noir);font-weight:600}
+.corps section a.mailto{display:inline-block;justify-self:start;background:var(--noir);color:var(--casse);border-radius:999px;padding:13px 26px;font-size:16px;font-weight:600;text-decoration:none;margin:4px 0 18px;transition:transform .25s ease}
+.corps section a.mailto:hover{transform:translateY(-1px)}
+.back{display:inline-block;margin:44px 0 0;font-size:15px;font-weight:600;text-decoration:none}
+.back::before{content:"←";margin-right:10px;display:inline-block;transition:transform .25s ease}
+.back:hover::before{transform:translateX(-3px)}
+
+/* pied de page */
+.pied{margin-top:110px;border-radius:var(--r) var(--r) 0 0;background:var(--noir);color:#A3A3A7;padding:56px 0 60px;font-size:15px}
+.pied .wrap{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+.pied a{text-decoration:none;transition:color .2s}
+.pied .fl{display:flex;gap:30px}
+.pied .fl a:hover{color:var(--casse)}
+.pied .wm{color:var(--casse)}
+.edite{display:block;font-size:13px;margin-top:6px;color:var(--gris)}
+
+@media(max-width:1080px){
+  .tete h1{font-size:64px}
+  .corps section{grid-template-columns:260px minmax(0,1fr);column-gap:50px}
+}
+@media(max-width:900px){
+  body{font-size:16.5px}
+  .wrap{padding:0 22px}
+  .links{display:none}
+  nav .wrap{height:62px}
+  .btn{padding:10px 18px;font-size:14.5px}
+  .tete{margin:0 10px;padding:64px 0 60px}
+  .tete h1{font-size:clamp(38px,11.4vw,52px)}
+  .tete .intro{font-size:17.5px}
+  .corps{padding-top:14px}
+  .corps section{display:block;padding:38px 0 24px}
+  .corps section > h2{font-size:24px;margin-bottom:16px}
+  .pied{margin-top:80px;padding:46px 0 50px}
+  .pied .wrap{flex-direction:column;align-items:flex-start;gap:18px}
+  .pied .fl{flex-wrap:wrap;gap:12px 24px}
+}
