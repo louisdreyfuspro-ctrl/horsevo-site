@@ -122,12 +122,15 @@
   /* simulateur : la story se compose en direct */
   .simu{display:none;padding:110px 0 0}
   .js .simu{display:block}
-  .s-grid{display:grid;grid-template-columns:1fr 348px;gap:96px;align-items:center}
+  .s-grid{display:grid;grid-template-columns:1fr 348px;gap:96px;align-items:start}
+  .s-ph{position:sticky;top:104px}
   .s-tx .lead{margin-top:20px}
-  .s-form{margin-top:42px;border-top:1px solid var(--trait)}
-  .rang{display:grid;grid-template-columns:178px 1fr;gap:18px;align-items:center;padding:20px 0;border-bottom:1px solid var(--trait)}
+  .s-form{margin-top:42px;border-top:1px solid var(--trait);counter-reset:rang}
+  .rang{display:grid;grid-template-columns:178px 1fr;gap:18px;align-items:center;padding:20px 0;border-bottom:1px solid var(--trait);counter-increment:rang}
+  .rang[hidden]{display:none}
   .et{font-size:15px;font-weight:600;display:flex;gap:14px}
   .et i{font-style:normal;font-weight:300;color:var(--gris);width:12px}
+  .et i::before{content:counter(rang)}
   .choix{display:flex;flex-wrap:wrap;gap:8px}
   .puce{position:relative;cursor:pointer}
   .puce input,.vig input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
@@ -146,6 +149,12 @@
   .vig:hover b{border-color:var(--noir)}
   .vig input:checked + img{box-shadow:0 0 0 2px var(--papier),0 0 0 4px var(--noir)}
   .vig.perso.pleine b{display:none}
+  .deux{display:flex;flex-direction:column;gap:10px}
+  .charge{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px}
+  .charge .aide{margin-top:0}
+  .bouton{border:1px solid var(--noir);border-radius:999px;padding:9px 20px;font-size:15px;font-weight:600;line-height:1.35;transition:background .2s,color .2s,opacity .2s}
+  .bouton:hover{background:var(--noir);color:var(--casse)}
+  .bouton:disabled{opacity:.5;cursor:default;background:transparent;color:var(--noir)}
   .s-fin{display:flex;align-items:center;gap:20px;margin-top:34px}
   .s-fin p{font-size:14.5px;line-height:1.45;color:var(--texte2)}
   .store.n{background:var(--noir);color:var(--casse)}
@@ -403,22 +412,52 @@
 <section class="simu" id="simulateur">
   <div class="wrap s-grid">
     <div class="s-tx">
-      <h2 class="rv">À vous.<br>Dites où vous allez.</h2>
-      <p class="lead rv d1">Un concours, un cheval, une photo. La story se compose toute seule.</p>
+      <h2 class="rv">À vous.<br><span id="s-titre">Dites où vous allez.</span></h2>
+      <p class="lead rv d1">Annonce, horaires, résultat. Un concours, un cheval, une photo, et la story se compose toute seule.</p>
       <form class="s-form" id="simu" autocomplete="off">
+        <div class="rang" role="radiogroup" aria-labelledby="et-0">
+          <div class="et" id="et-0"><i aria-hidden="true"></i>Votre annonce</div>
+          <div class="choix">
+            <label class="puce"><input type="radio" name="mode" value="annonce" checked><span>Où je vais</span></label>
+            <label class="puce"><input type="radio" name="mode" value="horaires"><span>Mes horaires</span></label>
+            <label class="puce"><input type="radio" name="mode" value="resultat"><span>Mon résultat</span></label>
+          </div>
+        </div>
         <div class="rang" role="radiogroup" aria-labelledby="et-1">
-          <div class="et" id="et-1"><i>1</i>Votre concours</div>
+          <div class="et" id="et-1"><i aria-hidden="true"></i>Votre concours</div>
           <div class="choix" id="choix-concours"></div>
         </div>
         <div class="rang">
-          <label class="et" for="chevaux"><i>2</i>Vos chevaux</label>
+          <label class="et" for="chevaux" id="et-chevaux"><i aria-hidden="true"></i>Vos chevaux</label>
           <div>
             <input class="champ" id="chevaux" type="text" maxlength="90" value="Channah Z, Hiva Oa Vimaje" aria-describedby="aide-chevaux">
             <span class="aide" id="aide-chevaux">Plusieurs chevaux ? Séparez les noms par une virgule.</span>
           </div>
         </div>
+        <div class="rang" id="rang-horaires" hidden>
+          <div class="et"><i aria-hidden="true"></i>Vos horaires</div>
+          <div class="charge">
+            <button class="bouton" id="charger" type="button">Charger les horaires</button>
+            <span class="aide" id="statut-horaires" role="status"></span>
+          </div>
+        </div>
+        <div class="rang" id="rang-resultat" role="group" aria-labelledby="et-r" hidden>
+          <div class="et" id="et-r"><i aria-hidden="true"></i>Votre résultat</div>
+          <div class="deux">
+            <div class="choix" role="radiogroup" aria-label="Votre parcours">
+              <label class="puce"><input type="radio" name="score" value="Sans faute" checked><span>Sans faute</span></label>
+              <label class="puce"><input type="radio" name="score" value="4 points"><span>4 points</span></label>
+            </div>
+            <div class="choix" role="radiogroup" aria-label="Votre classement">
+              <label class="puce"><input type="radio" name="rang" value="1er"><span>1er</span></label>
+              <label class="puce"><input type="radio" name="rang" value="2e" checked><span>2e</span></label>
+              <label class="puce"><input type="radio" name="rang" value="3e"><span>3e</span></label>
+              <label class="puce"><input type="radio" name="rang" value="5e"><span>5e</span></label>
+            </div>
+          </div>
+        </div>
         <div class="rang" role="radiogroup" aria-labelledby="et-3">
-          <div class="et" id="et-3"><i>3</i>Votre photo</div>
+          <div class="et" id="et-3"><i aria-hidden="true"></i>Votre photo</div>
           <div class="choix">
             <label class="vig"><input type="radio" name="photo" value="pre" checked><img src="/assets/simu/pre-v.webp" width="180" height="240" loading="lazy" alt="Un cavalier dans un pré"></label>
             <label class="vig"><input type="radio" name="photo" value="galop"><img src="/assets/simu/galop-v.webp" width="180" height="240" loading="lazy" alt="Un galop le long de la lice"></label>
@@ -428,12 +467,8 @@
           </div>
         </div>
         <div class="rang" role="radiogroup" aria-labelledby="et-4">
-          <div class="et" id="et-4"><i>4</i>Votre style</div>
-          <div class="choix">
-            <label class="puce"><input type="radio" name="style" value="haras" checked><span>Haras</span></label>
-            <label class="puce"><input type="radio" name="style" value="editorial"><span>Éditorial</span></label>
-            <label class="puce"><input type="radio" name="style" value="rebours"><span>Compte à rebours</span></label>
-          </div>
+          <div class="et" id="et-4"><i aria-hidden="true"></i>Votre style</div>
+          <div class="choix" id="choix-style"></div>
         </div>
       </form>
       <div class="s-fin">
@@ -651,9 +686,9 @@
   dlg.addEventListener('click', function (e) { if (e.target === dlg) fermer(); });
   dlg.addEventListener('close', function () { grand.pause(); });
 
-  // ─── Simulateur : la story « où vous allez », composée comme dans l'app ───
-  // Trois modèles de l'app (Haras, Éditorial, Compte à rebours) redessinés sur
-  // une toile 1080 × 1920, mêmes cotes que l'application.
+  // ─── Simulateur : trois annonces (où je vais, mes horaires, mon résultat) ───
+  // Neuf modèles de l'app redessinés sur une toile 1080 × 1920, mêmes cotes
+  // que l'application.
   var simu = document.getElementById('simu');
   if (simu && simu.querySelector && document.createElement('canvas').getContext) (function () {
     var W = 1080, H = 1920, OR = '#E1A937';
@@ -900,11 +935,323 @@
       ctx.fillRect(M, yMeta - 60, 64, 6);
     }
 
-    var MODELES = { haras: haras, editorial: editorial, rebours: rebours };
+    // ── outils communs aux horaires et aux résultats
+    var CREME = '#F3EEE2', POPPINS = "Poppins, 'Helvetica Neue', Arial, sans-serif";
+    function arrondi(ctx, x, y, w, h, r) {
+      r = Math.min(r, w / 2, h / 2);
+      ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r);
+      ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+      ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r);
+      ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r); ctx.closePath();
+    }
+    function lignesDe(ctx, t, max) {
+      var mots = t.split(' '), lignes = [], cur = '';
+      mots.forEach(function (m) {
+        var essai = cur ? cur + ' ' + m : m;
+        if (ctx.measureText(essai).width <= max || !cur) cur = essai; else { lignes.push(cur); cur = m; }
+      });
+      if (cur) lignes.push(cur);
+      return lignes;
+    }
+    function tenir(ctx, t, max, nb, police, px, min) {
+      for (; px >= min; px -= 2) {
+        ctx.font = police(px);
+        var l = lignesDe(ctx, t, max);
+        if (l.length <= nb && l.every(function (x) { return ctx.measureText(x).width <= max; })) return { lignes: l, px: px };
+      }
+      ctx.font = police(min);
+      return { lignes: lignesDe(ctx, t, max).slice(0, nb), px: min };
+    }
+    function raccourcir(ctx, t, max) {
+      if (ctx.measureText(t).width <= max) return t;
+      while (t.length > 1 && ctx.measureText(t + '…').width > max) t = t.slice(0, -1).replace(/\s+$/, '');
+      return t + '…';
+    }
+    function pastille(ctx, t, cy) {
+      ctx.font = '800 26px ' + SANS;
+      var l = largeurEspacee(ctx, t, 5), w = l + 68, x = (W - w) / 2;
+      ombre(ctx, 'rgba(0,0,0,.35)', 16, 4); arrondi(ctx, x, cy - 28, w, 56, 28); ctx.fillStyle = OR; ctx.fill(); sansOmbre(ctx);
+      ctx.fillStyle = '#0F1116'; ctx.textBaseline = 'middle'; espacer(ctx, t, W / 2, cy + 1, 5); ctx.textBaseline = 'alphabetic';
+    }
+    function signature(ctx, y, a) {
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      ctx.font = '400 28px ' + SANS; var p = ctx.measureText('Made with ').width;
+      ctx.font = '700 28px ' + SANS; var n = ctx.measureText('Horsevo').width, x = (W - p - n) / 2;
+      ctx.fillStyle = 'rgba(255,255,255,' + a + ')';
+      ctx.font = '400 28px ' + SANS; ctx.fillText('Made with ', x, y);
+      ctx.font = '700 28px ' + SANS; ctx.fillText('Horsevo', x + p, y);
+    }
+    function barres(ctx, morceaux, x, y, px, clair, sombre, ep) {
+      var vide = ctx.measureText('  ').width, pas = vide * 2 + 3;
+      morceaux.forEach(function (m, k) {
+        ctx.fillStyle = clair; ctx.fillText(m, x, y); x += ctx.measureText(m).width;
+        if (k < morceaux.length - 1) { ctx.fillStyle = sombre; ctx.fillRect(x + vide, y - px * .74, ep, px * .86); x += pas; }
+      });
+    }
+    function largeurBarres(ctx, morceaux) {
+      var pas = ctx.measureText('  ').width * 2 + 3;
+      return morceaux.reduce(function (a, m) { return a + ctx.measureText(m).width; }, 0) + pas * (morceaux.length - 1);
+    }
 
-    // ── état, images, rendu
-    var toiles = simu.ownerDocument.querySelectorAll('#ecran canvas'), devant = 0, tour = 0;
-    var images = {}, perso = null;
+    // ── horaires, modèle « Piste »
+    function piste(ctx, d) {
+      voile(ctx, 0, 640, [[0, 'rgba(5,6,8,.78)'], [1, 'rgba(5,6,8,0)']]);
+      voile(ctx, H - 700, H, [[0, 'rgba(5,6,8,0)'], [1, 'rgba(5,6,8,.85)']]);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      var y = 170;
+      pastille(ctx, d.contexte, y); y += 58;
+      var t = tenir(ctx, 'HEURES DE PASSAGE', W - 120, 2, function (p) { return '400 ' + p + 'px ' + ANTON; }, 148, 64);
+      ombre(ctx, 'rgba(0,0,0,.55)', 24); ctx.fillStyle = CREME; ctx.textAlign = 'center';
+      t.lignes.forEach(function (l) { y += Math.round(t.px * 1.04); ctx.fillText(l, W / 2, y); });
+      sansOmbre(ctx);
+      y += 62; ctx.fillStyle = 'rgba(255,255,255,.82)';
+      ajusterEspace(ctx, d.sous, W - 180, 6, 28, 20, function (p) { return '600 ' + p + 'px ' + SANS; });
+      espacer(ctx, d.sous, W / 2, y, 6); y += 25;
+      y += 92; ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.fillRect(W / 2 - 150, y - 70, 300, 2);
+      ctx.fillStyle = CREME;
+      ajusterEspace(ctx, d.date, W - 160, 3, 42, 26, function (p) { return '700 ' + p + 'px ' + SANS; });
+      espacer(ctx, d.date, W / 2, y, 3);
+
+      var rangs = d.passages, n = rangs.length;
+      if (n) {
+        var haut = y + 88, bas = H - 130 - 56, axe = 236, cx = axe + 44, cl = W - 96 - cx;
+        var px = n <= 2 ? 48 : n <= 4 ? 40 : 34;
+        var hc = function (p) { return Math.round(p) + Math.round(p * .86) + 66; }, ec = function (p) { return Math.round(p * .8); };
+        var tot = function (p) { return n * hc(p) + ec(p) * (n - 1); };
+        while (px > 18 && haut + tot(px) > bas) px -= 1;
+        var y0 = haut + Math.max(0, Math.round((bas - haut - tot(px)) / 2)), tops = [], c = y0;
+        rangs.forEach(function () { tops.push(c); c += hc(px) + ec(px); });
+        var fin = tops[n - 1] + hc(px);
+        ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(axe - 1.5, y0 - 14, 3, fin - (y0 - 14));
+        rangs.forEach(function (r, i) {
+          var top = tops[i], dy = top + Math.round(px * .72);
+          if (!i) { ctx.beginPath(); ctx.arc(axe, dy, 15, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(225,169,55,.4)'; ctx.lineWidth = 2; ctx.stroke(); }
+          ctx.beginPath(); ctx.arc(axe, dy, i ? 6.5 : 9, 0, Math.PI * 2); ctx.fillStyle = i ? 'rgba(255,255,255,.9)' : OR; ctx.fill();
+          arrondi(ctx, cx, top, cl, hc(px), 22); ctx.fillStyle = 'rgba(8,9,12,.52)'; ctx.fill();
+          ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.stroke();
+          ctx.font = '700 ' + Math.round(px * .92) + 'px ' + SANS; ctx.fillStyle = CREME; ctx.textAlign = 'right';
+          ctx.fillText(r.heure, axe - 26, top + Math.round(px * 1.05));
+          var no = 'N°' + r.numero; ctx.font = '700 ' + Math.round(px * .7) + 'px ' + SANS;
+          var bw = ctx.measureText(no).width + 30, bh = Math.round(px * 1.05), bx = cx + cl - 22 - bw, by = top + Math.round(px * .4);
+          arrondi(ctx, bx, by, bw, bh, bh / 2); ctx.fillStyle = 'rgba(225,169,55,.15)'; ctx.fill();
+          ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(225,169,55,.6)'; ctx.stroke();
+          ctx.fillStyle = CREME; ctx.textAlign = 'center'; ctx.fillText(no, bx + bw / 2, by + bh - Math.round(bh * .31));
+          ctx.textAlign = 'left';
+          var max = cl - 60 - (bw + 26) - 20;
+          ajuster(ctx, r.cheval, max, function (p) { return '600 ' + p + 'px ' + SANS; }, px, Math.round(px * .66), 1);
+          ctx.fillStyle = '#fff'; ctx.fillText(raccourcir(ctx, r.cheval, max), cx + 32, top + Math.round(px * 1.15));
+          ctx.font = '400 ' + Math.round(px * .82) + 'px ' + SANS; ctx.fillStyle = 'rgba(255,255,255,.68)';
+          ctx.fillText(raccourcir(ctx, r.epreuve, cl - 60), cx + 32, top + Math.round(px * 1.15) + Math.round(px * 1.05));
+        });
+      }
+      signature(ctx, H - 70, .85);
+    }
+
+    // ── horaires, modèle « Édito »
+    function edito(ctx, d) {
+      var C = 90;
+      voile(ctx, 0, 560, [[0, 'rgba(4,5,7,.72)'], [1, 'rgba(4,5,7,0)']]);
+      voile(ctx, H - Math.round(H * .66), H, [[0, 'rgba(4,5,7,0)'], [.5, 'rgba(4,5,7,.68)'], [1, 'rgba(4,5,7,.94)']]);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      var y = 178;
+      ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = '600 26px ' + SANS; espacerGauche(ctx, d.contexte, C, y, 6);
+      y += 26; ctx.fillStyle = OR; ctx.fillRect(C, y, 56, 3); y += 58;
+      var t = tenir(ctx, 'HEURES DE PASSAGE', W - C * 2, 2, function (p) { return '400 ' + p + 'px ' + ANTON; }, 120, 56);
+      ombre(ctx, 'rgba(0,0,0,.5)', 22); ctx.fillStyle = CREME;
+      t.lignes.forEach(function (l) { y += Math.round(t.px * 1.02); ctx.fillText(l, C, y); });
+      sansOmbre(ctx);
+      y += 52; ctx.fillStyle = 'rgba(255,255,255,.78)';
+      ajusterEspace(ctx, d.sous, W - C * 2, 5, 27, 19, function (p) { return '600 ' + p + 'px ' + SANS; });
+      espacerGauche(ctx, d.sous, C, y, 5);
+      ctx.font = '400 24px ' + SANS; ctx.fillStyle = 'rgba(255,255,255,.62)'; y += 38; ctx.fillText(d.dateBasse, C, y);
+
+      var rangs = d.passages, n = rangs.length;
+      if (n) {
+        var haut = y + 76, bas = H - 130 - 48, px = n <= 2 ? 56 : n <= 4 ? 47 : 39;
+        var hr = function (p) { return Math.round(p * 1.12) + Math.round(p * .82) + Math.round(p * .95); };
+        while (px > 24 && haut + n * hr(px) > bas) px -= 1;
+        ctx.font = '300 ' + Math.round(px * 1.18) + 'px ' + SANS;
+        var lh = rangs.reduce(function (a, r) { return Math.max(a, ctx.measureText(r.heure).width); }, 0), xc = C + lh + 38;
+        var cy = Math.max(haut, bas - n * hr(px));
+        rangs.forEach(function (r, i) {
+          var base = cy + Math.round(px * 1.05);
+          ctx.font = '300 ' + Math.round(px * 1.18) + 'px ' + SANS; ctx.fillStyle = i ? CREME : OR; ctx.fillText(r.heure, C, base);
+          var nom = r.cheval.toUpperCase(), max = W - C - xc;
+          ajuster(ctx, nom, max, function (p) { return '600 ' + p + 'px ' + SANS; }, px, Math.round(px * .62), 1);
+          ctx.fillStyle = '#fff'; ctx.fillText(raccourcir(ctx, nom, max), xc, base);
+          var det = 'N°' + r.numero + ' · ' + r.epreuve;
+          ajuster(ctx, det, max, function (p) { return '400 ' + p + 'px ' + SANS; }, Math.round(px * .66), Math.round(px * .48), 1);
+          ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillText(raccourcir(ctx, det, max), xc, base + Math.round(px * .82));
+          cy += hr(px);
+          if (i < n - 1) { ctx.fillStyle = 'rgba(255,255,255,.16)'; ctx.fillRect(C, cy - Math.round(px * .42), W - C * 2, 1.5); }
+        });
+      }
+      signature(ctx, H - 70, .85);
+    }
+
+    // ── horaires, modèle « Direct »
+    function direct(ctx, d) {
+      var M = 84;
+      voile(ctx, 0, 300, [[0, 'rgba(0,0,0,.32)'], [1, 'rgba(0,0,0,0)']]);
+      voile(ctx, H * .5, H, [[0, 'rgba(5,6,8,0)'], [.7, 'rgba(5,6,8,.52)'], [1, 'rgba(5,6,8,.8)']]);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      var rangs = d.passages, n = rangs.length, p = n <= 2 ? 34 : n <= 4 ? 30 : 26;
+      var hp = Math.round(p * 2.3) + Math.round(p), ec = Math.round(p * .55);
+      var y = H - 150, pied = y;
+      for (var i = n - 1; i >= 0; i--) {
+        var r = rangs[i], py = y - hp, marge = Math.round(p * .9), sep = Math.round(p * .7);
+        ctx.font = '700 ' + p + 'px ' + SANS; var lH = ctx.measureText(r.heure).width;
+        var no = 'N°' + r.numero; ctx.font = '400 ' + Math.round(p * .78) + 'px ' + SANS; var lN = ctx.measureText(no).width + sep;
+        var max = W - M - 60 - marge * 2 - (lH + sep * 2 + 2) - Math.round(p * 2.6);
+        ctx.font = '600 ' + p + 'px ' + SANS; var nom = raccourcir(ctx, r.cheval.toUpperCase(), max), lC = ctx.measureText(nom).width;
+        var lp = marge + lH + sep + 2 + sep + lC + lN + marge;
+        ctx.font = '400 ' + Math.round(p * .78) + 'px ' + SANS;
+        lp = Math.max(lp, Math.min(W - M - 60, ctx.measureText(r.epreuve).width + marge * 2));
+        arrondi(ctx, M, py, lp, hp, 16); ctx.fillStyle = 'rgba(8,9,12,.46)'; ctx.fill();
+        ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.stroke();
+        var ty = py + Math.round(p * 2.3) / 2 + p * .36, tx = M + marge;
+        ctx.font = '700 ' + p + 'px ' + SANS; ctx.fillStyle = i ? 'rgba(255,255,255,.92)' : OR; ctx.fillText(r.heure, tx, ty);
+        tx += lH + sep; ctx.fillStyle = 'rgba(255,255,255,.35)';
+        ctx.fillRect(tx, py + Math.round(p * 2.3) / 2 - Math.round(p * .55), 2, Math.round(p * 1.1)); tx += 2 + sep;
+        ctx.font = '600 ' + p + 'px ' + SANS; ctx.fillStyle = '#fff'; ctx.fillText(nom, tx, ty);
+        ctx.font = '400 ' + Math.round(p * .78) + 'px ' + SANS; ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillText(no, tx + lC + sep, ty);
+        ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillText(raccourcir(ctx, r.epreuve, lp - marge * 2), M + marge, py + Math.round(p * 2.3) + Math.round(p * .28));
+        y = py - ec;
+      }
+      y -= 30;
+      ombre(ctx, 'rgba(0,0,0,.65)', 24, 4);
+      var tp = ajuster(ctx, 'HEURES DE PASSAGE', W - M - 60, function (q) { return '700 ' + q + 'px ' + SANS; }, 84, 40);
+      ctx.fillStyle = '#fff'; ctx.fillText('HEURES DE PASSAGE', M, y); sansOmbre(ctx);
+      var yo = y - Math.round(tp * .75) - 56 - 14;
+      ajusterEspace(ctx, d.contexte, W - M - 160, 5, 27, 17, function (q) { return '700 ' + q + 'px ' + SANS; });
+      var lo = largeurEspacee(ctx, d.contexte, 5) + 56;
+      ctx.fillStyle = OR; ctx.beginPath(); ctx.moveTo(M, yo); ctx.lineTo(M + lo, yo); ctx.lineTo(M + lo - 14, yo + 56); ctx.lineTo(M, yo + 56); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#0F1116'; espacerGauche(ctx, d.contexte, M + 28, yo + 28 + 10, 5);
+      yo -= 20;
+      ombre(ctx, 'rgba(0,0,0,.6)', 18);
+      ajuster(ctx, d.dateBasse, W - M - 80, function (q) { return 'italic 400 ' + q + 'px ' + SERIF; }, 38, 24);
+      ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fillText(d.dateBasse, M, yo - 24); sansOmbre(ctx);
+      ctx.fillStyle = OR; ctx.fillRect(M - 34, yo, 7, pied - yo);
+      signature(ctx, H - 70, .85);
+    }
+
+    // ── résultat, modèle « Classique »
+    function classique(ctx, d) {
+      var M = 56, max = W - M * 2;
+      voile(ctx, 0, 340, [[0, 'rgba(0,0,0,.34)'], [1, 'rgba(0,0,0,0)']]);
+      voile(ctx, H * .55, H, [[0, 'rgba(0,0,0,0)'], [.55, 'rgba(0,0,0,.38)'], [1, 'rgba(0,0,0,.72)']]);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      var y = H - 148;
+      var c = tenir(ctx, d.mot, max, 2, function (p) { return 'italic 400 ' + p + 'px ' + SERIF; }, 38, 28);
+      ombre(ctx, 'rgba(0,0,0,.5)', 10); ctx.fillStyle = 'rgba(255,255,255,.86)';
+      for (var i = c.lignes.length - 1; i >= 0; i--) { ctx.fillText(c.lignes[i], M, y); y -= Math.round(c.px * 1.42); }
+      y -= 18;
+      var morceaux = [d.epreuve, d.score, d.rang], px = 46;
+      ctx.font = '300 ' + px + 'px ' + POPPINS;
+      while (px > 28 && largeurBarres(ctx, morceaux) > max) { px -= 2; ctx.font = '300 ' + px + 'px ' + POPPINS; }
+      ombre(ctx, 'rgba(0,0,0,.55)', 12); barres(ctx, morceaux, M, y, px, 'rgba(255,255,255,.96)', 'rgba(255,255,255,.55)', 2.5);
+      y -= Math.round(46 * 1.43) + 22;
+      var n = tenir(ctx, d.cheval.toUpperCase(), max - 40, 2, function (p) { return '600 ' + p + 'px ' + POPPINS; }, 66, 40);
+      ombre(ctx, 'rgba(0,0,0,.6)', 18); ctx.fillStyle = '#fff';
+      for (var k = n.lignes.length - 1; k >= 0; k--) { espacerGauche(ctx, n.lignes[k], M, y, 2.5); y -= n.px + 12; }
+      y -= 14; ombre(ctx, 'rgba(0,0,0,.5)', 10); ctx.fillStyle = 'rgba(255,255,255,.75)';
+      ajusterEspace(ctx, d.contexte, max, 6, 27, 19, function (p) { return '300 ' + p + 'px ' + POPPINS; });
+      espacerGauche(ctx, d.contexte, M, y, 6); sansOmbre(ctx);
+      signature(ctx, H - 56, .8);
+    }
+
+    // ── résultat, modèle « Palmarès »
+    function palmares(ctx, d) {
+      var cx = W / 2, max = W - 160;
+      voile(ctx, 0, 340, [[0, 'rgba(0,0,0,.34)'], [1, 'rgba(0,0,0,0)']]);
+      voile(ctx, H * .4, H, [[0, 'rgba(0,0,0,0)'], [.5, 'rgba(0,0,0,.45)'], [1, 'rgba(0,0,0,.82)']]);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      var y = H - 150;
+      var c = tenir(ctx, d.mot, max, 2, function (p) { return 'italic 400 ' + p + 'px ' + SERIF; }, 38, 28);
+      ombre(ctx, 'rgba(0,0,0,.5)', 10); ctx.fillStyle = 'rgba(255,255,255,.86)';
+      for (var i = c.lignes.length - 1; i >= 0; i--) { ctx.fillText(c.lignes[i], cx, y); y -= Math.round(c.px * 1.42); }
+      y -= 26;
+      var n = tenir(ctx, d.cheval.toUpperCase(), max - 60, 2, function (p) { return '600 ' + p + 'px ' + POPPINS; }, 58, 36);
+      ombre(ctx, 'rgba(0,0,0,.6)', 16); ctx.fillStyle = '#fff';
+      for (var k = n.lignes.length - 1; k >= 0; k--) { espacer(ctx, n.lignes[k], cx, y, 2.5); y -= n.px + 14; }
+      y -= 10; sansOmbre(ctx);
+      ctx.fillStyle = OR; ctx.fillRect(cx - 36, y - 3, 72, 3); y -= 40;
+      var ligne = (d.epreuve + '  ·  ' + d.score).toUpperCase();
+      ombre(ctx, 'rgba(0,0,0,.5)', 10); ctx.fillStyle = 'rgba(255,255,255,.85)';
+      ajusterEspace(ctx, ligne, max, 5, 30, 20, function (p) { return '300 ' + p + 'px ' + POPPINS; });
+      espacer(ctx, ligne, cx, y, 5); y -= 30 + 18 + 16;
+      var m = d.rang.match(/^(\d+)(.*)$/), num = m[1], suf = m[2], px = 300;
+      ctx.font = '400 ' + px + 'px ' + SERIF; var l1 = ctx.measureText(num).width;
+      ctx.font = '400 ' + Math.round(px * .3) + 'px ' + SERIF; var l2 = ctx.measureText(suf).width, x0 = cx - (l1 + 8 + l2) / 2;
+      ombre(ctx, 'rgba(0,0,0,.55)', 22); ctx.textAlign = 'left';
+      ctx.font = '400 ' + px + 'px ' + SERIF; ctx.fillStyle = '#fff'; ctx.fillText(num, x0, y);
+      ctx.font = '400 ' + Math.round(px * .3) + 'px ' + SERIF; ctx.fillStyle = OR; ctx.fillText(suf, x0 + l1 + 8, y - Math.round(px * .52));
+      ctx.textAlign = 'center'; y -= Math.round(px * .72) + 44;
+      ombre(ctx, 'rgba(0,0,0,.5)', 10); ctx.fillStyle = 'rgba(255,255,255,.78)';
+      ajusterEspace(ctx, d.contexte, max, 6, 27, 19, function (p) { return '300 ' + p + 'px ' + POPPINS; });
+      espacer(ctx, d.contexte, cx, y, 6); sansOmbre(ctx);
+      signature(ctx, H - 56, .8);
+    }
+
+    // ── résultat, modèle « Direct » (bandeau)
+    function bandeau(ctx, d) {
+      var M = 64;
+      voile(ctx, 0, 320, [[0, 'rgba(0,0,0,.3)'], [1, 'rgba(0,0,0,0)']]);
+      voile(ctx, H * .62, H, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,.45)']]);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      var pied = H - 150, morceaux = [d.epreuve, d.score], rp = 32;
+      ctx.font = '300 ' + rp + 'px ' + POPPINS;
+      while (rp > 20 && largeurBarres(ctx, morceaux) > W - M * 2) { rp -= 2; ctx.font = '300 ' + rp + 'px ' + POPPINS; }
+      var hr = Math.round(rp * 1.75), hs = hr + 26;
+      var m = d.rang.match(/^(\d+)(.*)$/), num = m[1], suf = m[2];
+      ctx.font = '600 64px ' + POPPINS; var lr = ctx.measureText(num).width;
+      ctx.font = '600 32px ' + POPPINS; lr += ctx.measureText(suf).width + 4;
+      var n = tenir(ctx, d.cheval.toUpperCase(), Math.max(120, W - M * 2 - lr - 72 - 30), 2, function (p) { return '600 ' + p + 'px ' + POPPINS; }, 52, 32);
+      var hl = Math.round(n.px * 1.28), hb = Math.max(140, n.lignes.length * hl + 74), haut = pied - hs - hb;
+      ctx.fillStyle = 'rgba(9,10,13,.78)'; ctx.fillRect(0, pied - hs, W, hs);
+      ctx.fillStyle = 'rgba(9,10,13,.92)'; ctx.fillRect(0, haut, W, hb);
+      ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(0, pied - hs, W, 2);
+      ctx.fillStyle = OR; ctx.fillRect(0, haut, 10, hb);
+      ctx.font = '300 ' + rp + 'px ' + POPPINS;
+      barres(ctx, morceaux, M, pied - hs + 13 + Math.round(rp * 1.15), rp, 'rgba(255,255,255,.85)', 'rgba(255,255,255,.4)', 2);
+      var ny = haut + (hb - n.lignes.length * hl) / 2 + Math.round(n.px * .92);
+      ctx.font = '600 ' + n.px + 'px ' + POPPINS; ctx.fillStyle = '#fff';
+      n.lignes.forEach(function (l) { espacerGauche(ctx, l, M, ny, 2); ny += hl; });
+      var rx = W - M - lr, ry = haut + hb / 2 + Math.round(64 * .34);
+      ctx.font = '600 64px ' + POPPINS; ctx.fillStyle = OR; ctx.fillText(num, rx, ry);
+      var ln = ctx.measureText(num).width; ctx.font = '600 32px ' + POPPINS; ctx.fillText(suf, rx + ln + 4, ry - Math.round(64 * .42));
+      ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(rx - 36, haut + 34, 2, hb - 68);
+      ajusterEspace(ctx, d.contexte, W - M * 2 - 44, 3, 24, 16, function (p) { return '600 ' + p + 'px ' + POPPINS; });
+      var lo = largeurEspacee(ctx, d.contexte, 3) + 44, yo = haut - 54;
+      ctx.fillStyle = OR; ctx.fillRect(M, yo, lo, 54);
+      ctx.fillStyle = '#0F1116'; espacerGauche(ctx, d.contexte, M + 22, yo + 27 + 9, 3);
+      var c = tenir(ctx, d.mot, W - M * 2, 2, function (p) { return 'italic 400 ' + p + 'px ' + SERIF; }, 36, 26), cy = yo - 34;
+      ombre(ctx, 'rgba(0,0,0,.55)', 10); ctx.fillStyle = 'rgba(255,255,255,.9)';
+      for (var i = c.lignes.length - 1; i >= 0; i--) { ctx.fillText(c.lignes[i], M, cy); cy -= Math.round(c.px * 1.42); }
+      sansOmbre(ctx);
+      signature(ctx, H - 56, .8);
+    }
+
+    // ── les trois annonces et leurs styles
+    var MODES = {
+      annonce: { titre: 'Dites où vous allez.', style: 'haras', styles: [['haras', 'Haras', haras], ['editorial', 'Éditorial', editorial], ['rebours', 'Compte à rebours', rebours]] },
+      horaires: { titre: 'Publiez vos horaires.', style: 'piste', styles: [['piste', 'Piste', piste], ['edito', 'Édito', edito], ['direct', 'Direct', direct]] },
+      resultat: { titre: 'Annoncez votre résultat.', style: 'classique', styles: [['classique', 'Classique', classique], ['palmares', 'Palmarès', palmares], ['bandeau', 'Direct', bandeau]] }
+    };
+    // Horaires d'exemple, distribués aux chevaux dans l'ordre où ils sont écrits
+    var PASSAGES = [
+      { heure: '9h30', epreuve: 'Prix 1m35', numero: 12 },
+      { heure: '11h04', epreuve: 'Vitesse 1m40', numero: 34 },
+      { heure: '14h20', epreuve: 'Prix 1m45', numero: 7 },
+      { heure: '17h45', epreuve: 'Grand Prix 1m50', numero: 21 }
+    ];
+    var MOTS = { 'Sans faute': 'Sans faute, jusqu’au dernier obstacle.', '4 points': 'Une barre, et beaucoup de belles choses.' };
+
+    var toiles = document.querySelectorAll('#ecran canvas'), devant = 0, tour = 0;
+    var images = {}, perso = null, charges = false, visibles = 0, enCharge = false;
+    var titre = document.getElementById('s-titre'), champ = document.getElementById('chevaux');
+    var bouton = document.getElementById('charger'), statut = document.getElementById('statut-horaires');
+
     function charger(src) {
       if (!images[src]) images[src] = new Promise(function (ok, ko) {
         var i = new Image(); i.onload = function () { ok(i); }; i.onerror = ko; i.src = src;
@@ -912,34 +1259,111 @@
       return images[src];
     }
     function valeur(nom) { var c = simu.querySelector('input[name="' + nom + '"]:checked'); return c ? c.value : null; }
+    function chevaux() { return champ.value.split(',').map(function (s) { return s.trim(); }).filter(Boolean); }
+    function samedi(c) {
+      for (var j = jour(c.debut), f = jour(c.fin); j <= f; j.setDate(j.getDate() + 1)) if (j.getDay() === 6) return new Date(j);
+      return jour(c.debut);
+    }
     function etat() {
       var c = aVenir.filter(function (x) { return x.id === valeur('concours'); })[0] || aVenir[0];
-      var chevaux = document.getElementById('chevaux').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-      return { nom: c.nom, pays: c.pays, niveau: c.niveau, debut: jour(c.debut), fin: jour(c.fin), chevaux: chevaux, style: valeur('style') || 'haras', photo: valeur('photo') };
+      var mode = valeur('mode') || 'annonce', liste = chevaux(), j = samedi(c);
+      var nomJour = j.toLocaleDateString('fr-FR', { weekday: 'long' }), quand = nomJour + ' ' + quantieme(j) + ' ' + moisLong(j);
+      var noms = liste.length ? liste : ['Votre cheval'], score = valeur('score') || 'Sans faute';
+      return {
+        mode: mode, style: valeur('style') || MODES[mode].style, photo: valeur('photo'),
+        nom: c.nom, pays: c.pays, niveau: c.niveau, debut: jour(c.debut), fin: jour(c.fin), chevaux: liste,
+        contexte: c.nom.toUpperCase() + ' · ' + c.niveau,
+        sous: nomJour.toUpperCase() + ' · PISTE PRINCIPALE', date: quand.toUpperCase(),
+        dateBasse: quand.charAt(0).toUpperCase() + quand.slice(1), quand: quand,
+        passages: charges ? noms.slice(0, 4).slice(0, visibles).map(function (n, i) { return { cheval: n, heure: PASSAGES[i].heure, epreuve: PASSAGES[i].epreuve, numero: PASSAGES[i].numero }; }) : [],
+        cheval: noms[0], epreuve: 'Grand Prix 1m45', score: score, rang: valeur('rang') || '2e', mot: MOTS[score]
+      };
+    }
+    function modele(d) {
+      var s = MODES[d.mode].styles.filter(function (x) { return x[0] === d.style; })[0] || MODES[d.mode].styles[0];
+      return s[2];
     }
     function polices() {
       if (!document.fonts || !document.fonts.load) return Promise.resolve();
-      return Promise.all([document.fonts.load("400 100px 'Libre Caslon Display'"), document.fonts.load('400 100px Anton')]).catch(function () {});
+      return Promise.all([
+        document.fonts.load("400 100px 'Libre Caslon Display'"), document.fonts.load('400 100px Anton'),
+        document.fonts.load('300 40px Poppins'), document.fonts.load('600 40px Poppins')
+      ]).catch(function () {});
     }
-    function rendre() {
+    function rendre(surPlace) {
       var moi = ++tour, d = etat();
-      var source = d.photo === 'perso' && perso ? Promise.resolve(perso) : charger('/assets/simu/' + (d.photo === 'perso' ? 'pre' : d.photo) + '.webp');
-      Promise.all([source, polices()]).then(function (r) {
+      var source = d.photo === 'perso' && perso ? Promise.resolve(perso) : charger('/assets/simu/' + (d.photo === 'perso' || !d.photo ? 'pre' : d.photo) + '.webp');
+      return Promise.all([source, polices()]).then(function (r) {
         if (moi !== tour) return;
-        var cible = toiles[1 - devant], ctx = cible.getContext('2d');
+        var cible = toiles[surPlace === true ? devant : 1 - devant], ctx = cible.getContext('2d');
         ctx.setTransform(1, 0, 0, 1, 0, 0); sansOmbre(ctx); ctx.globalAlpha = 1;
         ctx.fillStyle = '#050708'; ctx.fillRect(0, 0, W, H);
         couvrir(ctx, r[0]);
-        MODELES[d.style](ctx, d);
+        modele(d)(ctx, d);
+        if (surPlace === true) return;
         cible.classList.add('vue'); toiles[devant].classList.remove('vue');
         devant = 1 - devant;
       }).catch(function () {});
     }
 
+    // ── la forme du formulaire suit l'annonce choisie
+    function installer() {
+      var mode = valeur('mode') || 'annonce', m = MODES[mode], boite = document.getElementById('choix-style');
+      titre.textContent = m.titre;
+      document.getElementById('rang-horaires').hidden = mode !== 'horaires';
+      document.getElementById('rang-resultat').hidden = mode !== 'resultat';
+      document.getElementById('et-chevaux').lastChild.nodeValue = mode === 'resultat' ? 'Votre cheval' : 'Vos chevaux';
+      document.getElementById('aide-chevaux').textContent = mode === 'resultat'
+        ? 'Le cheval dont vous annoncez le résultat.' : 'Plusieurs chevaux ? Séparez les noms par une virgule.';
+      boite.textContent = '';
+      m.styles.forEach(function (s) {
+        var l = document.createElement('label'); l.className = 'puce';
+        var r = document.createElement('input'); r.type = 'radio'; r.name = 'style'; r.value = s[0]; r.checked = s[0] === m.style;
+        var t = document.createElement('span'); t.textContent = s[1];
+        l.appendChild(r); l.appendChild(t); boite.appendChild(l);
+      });
+    }
+
+    function dire() {
+      if (!charges || enCharge) return;
+      var n = Math.min(4, Math.max(1, chevaux().length));
+      statut.textContent = (n > 1 ? n + ' passages chargés' : '1 passage chargé') + ', ' + etat().quand + '.';
+    }
+
     var attente;
-    simu.addEventListener('change', function (e) { if (e.target.id !== 'photo-perso') rendre(); });
-    document.getElementById('chevaux').addEventListener('input', function () { clearTimeout(attente); attente = setTimeout(rendre, 180); });
+    simu.addEventListener('change', function (e) {
+      var c = e.target;
+      if (c.id === 'photo-perso') return;
+      if (c.name === 'mode') installer();
+      if (c.name === 'concours') dire();
+      if (c.name === 'style') MODES[valeur('mode') || 'annonce'].style = c.value;
+      rendre();
+    });
+    champ.addEventListener('input', function () {
+      clearTimeout(attente);
+      attente = setTimeout(function () { if (charges && !enCharge) visibles = 4; dire(); rendre(valeur('mode') !== 'annonce'); }, 180);
+    });
     simu.addEventListener('submit', function (e) { e.preventDefault(); });
+
+    // « Charger les horaires » : les passages arrivent un à un, comme dans l'app
+    bouton.addEventListener('click', function () {
+      if (enCharge) return;
+      enCharge = true; charges = false; visibles = 0;
+      bouton.disabled = true; bouton.textContent = 'Chargement…'; statut.textContent = '';
+      rendre(true);
+      setTimeout(function () {
+        var n = Math.min(4, Math.max(1, chevaux().length));
+        charges = true;
+        (function suivant() {
+          visibles += 1;
+          rendre(true);
+          if (visibles < n) return setTimeout(suivant, calme ? 0 : 280);
+          enCharge = false; visibles = 4;
+          bouton.disabled = false; bouton.textContent = 'Recharger';
+          dire();
+        })();
+      }, calme ? 0 : 750);
+    });
 
     // la photo du visiteur ne quitte jamais son appareil : elle est lue sur place
     document.getElementById('photo-perso').addEventListener('change', function () {
@@ -957,6 +1381,7 @@
       i.src = url;
     });
 
+    installer();
     // le simulateur ne se réveille qu'à l'approche de l'écran
     var section = document.getElementById('simulateur');
     if ('IntersectionObserver' in window && !fige) {
