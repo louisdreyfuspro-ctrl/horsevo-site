@@ -34,7 +34,7 @@
 <header class="tete">
   <div class="wrap">
     <h1>Politique de <span class="gold">confidentialité</span></h1>
-    <p class="updated">Dernière mise à jour : 24 juin 2026</p>
+    <p class="updated">Dernière mise à jour : 14 octobre 2026</p>
     <p class="intro">
       Cette politique explique quelles données Horsevo collecte, pourquoi, et ce que tu peux
       faire pour les contrôler. On va droit au but : pas de vente de données, pas de publicité,
@@ -60,8 +60,11 @@
       <li><b>Compte et authentification</b> : ton adresse e-mail et un identifiant de compte, gérés via Supabase Auth. Si tu te connectes avec Apple ou Google, nous recevons l'e-mail associé.</li>
       <li><b>Profil</b> : ton nom et, si tu en ajoutes une, ta photo de profil.</li>
       <li><b>Données que tu saisis</b> : tes chevaux, tes concours, ton écurie, les membres de ton équipe et les informations associées.</li>
-      <li><b>Photos et vidéos</b> que tu choisis d'importer (logos d'écurie, médias de tes publications).</li>
+      <li><b>Photos</b> que tu choisis d'importer (logos d'écurie, photos de tes publications) et les visuels que tu crées. <b>Tes vidéos restent sur ton téléphone</b> : le montage se fait dessus, seule une image d'aperçu est enregistrée.</li>
       <li><b>Jeton de notification push</b> si tu actives les notifications, pour t'envoyer des rappels (concours, tâches).</li>
+      <li><b>Statistiques d'usage et rapports d'erreur</b> : les écrans ouverts, les fonctions utilisées, les erreurs et les blocages de l'app, avec la version de l'app et la taille de l'écran. Ils sont liés à ton compte et servent uniquement à corriger les bugs et à améliorer l'app.</li>
+      <li><b>Un identifiant d'appareil aléatoire</b>, créé par l'app (sans lien avec ton téléphone), pour que ton compte ne serve que sur un appareil à la fois.</li>
+      <li><b>L'état de ton abonnement</b> (actif ou non), fourni par Apple ou Google. Nous ne voyons jamais tes moyens de paiement.</li>
     </ul>
     <p>
       Nous ne demandons pas d'accès à ta géolocalisation, à tes contacts ni à des identifiants publicitaires.
@@ -74,6 +77,8 @@
       <li>Faire fonctionner l'app : créer ton compte et te connecter.</li>
       <li>Créer, gérer et partager tes publications et le contenu de ton écurie.</li>
       <li>Gérer ton planning de concours et t'envoyer les rappels que tu as activés.</li>
+      <li>Repérer et corriger les bugs, et améliorer l'app, grâce aux statistiques d'usage et aux rapports d'erreur.</li>
+      <li>Protéger ton compte (un appareil à la fois).</li>
     </ul>
     <p>
       Nous ne faisons aucun profilage publicitaire et n'utilisons pas tes données pour de la
@@ -85,9 +90,10 @@
     <h2><span class="num">04</span> Hébergement et sous-traitants</h2>
     <p>Tes données sont traitées par un petit nombre de prestataires, uniquement pour faire fonctionner l'app :</p>
     <ul>
-      <li><b>Supabase</b> : base de données, authentification et stockage des fichiers (photos, vidéos, documents). Tes données sont hébergées dans l'<b>Union européenne</b> (AWS, région Francfort).</li>
+      <li><b>Supabase</b> : base de données, authentification et stockage des fichiers (photos, documents). Tes données sont hébergées dans l'<b>Union européenne</b> (AWS, région Francfort).</li>
       <li><b>Apple</b> : distribution via l'App Store, gestion des abonnements et acheminement des notifications push.</li>
-      <li><b>Anthropic</b> (États-Unis) : uniquement si tu utilises l'assistant de légende. Le texte que tu as saisi (et lui seul, jamais tes photos ni tes données de compte) est transmis de façon chiffrée pour être reformulé. Il n'est pas utilisé pour entraîner des modèles et n'est pas conservé au-delà du traitement de ta demande. Cette fonction est facultative : rien ne part sans que tu appuies sur le bouton.</li>
+      <li><b>Google</b> : distribution via Google Play et gestion des abonnements sur Android.</li>
+      <li><b>Anthropic</b> (États-Unis), pour deux usages. L'assistant de légende, facultatif : le texte que tu as saisi (et lui seul, jamais tes photos ni tes données de compte) est transmis de façon chiffrée pour être reformulé, et rien ne part sans que tu appuies sur le bouton. Notre contrôle qualité : chaque nuit, un outil interne relit les statistiques d'usage et les rapports d'erreur pour repérer les bugs. Dans les deux cas, ces données ne sont pas utilisées pour entraîner des modèles et ne sont pas conservées par Anthropic au-delà du traitement.</li>
       <li><b>Resend</b> (États-Unis) : envoi des e-mails de service (invitation à rejoindre une écurie, envoi de facture). Seuls l'adresse du destinataire et le contenu du message sont traités, le temps de l'envoi.</li>
     </ul>
     <p>
@@ -111,7 +117,8 @@
     <p>Tu peux à tout moment :</p>
     <ul>
       <li><b>Accéder</b> à tes données et les <b>corriger</b> depuis ton profil dans l'app.</li>
-      <li><b>Supprimer ton compte directement dans l'app</b> : Profil, section « Zone de danger », bouton « Supprimer mon compte ». Cette action est irréversible et efface tes données (chevaux, concours, stories, écurie) ainsi que ton compte.</li>
+      <li><b>Supprimer ton compte directement dans l'app</b> : Profil, section « Zone de danger », bouton « Supprimer mon compte ». Cette action est irréversible et efface ton compte et tes données : chevaux, concours, stories, écurie, photos, statistiques d'usage.</li>
+      <li>Tu n'as plus l'app ? Tout est expliqué sur <a href="/supprimer-compte">horsevo.app/supprimer-compte</a>.</li>
     </ul>
     <p>
       Pour toute autre demande (export, opposition, réclamation), écris à
@@ -123,7 +130,7 @@
     <h2><span class="num">07</span> Conservation des données</h2>
     <p>
       Nous conservons tes données tant que ton compte est actif. Quand tu supprimes ton compte,
-      tes données applicatives et ton compte d'authentification sont effacés. Des copies
+      tes données applicatives, tes fichiers et ton compte d'authentification sont effacés. Des copies
       techniques temporaires (sauvegardes) sont purgées sous 30 jours au plus avant d'expirer.
     </p>
   </section>
