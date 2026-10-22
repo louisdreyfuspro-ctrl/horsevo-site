@@ -86,9 +86,15 @@
   .hero{padding:0 16px;position:relative}
   .hero-in{position:relative;height:740px;border-radius:var(--r);overflow:hidden;background:var(--noir)}
   .hero-in picture,.hero-in img{width:100%;height:100%}
-  .hero-in img{object-fit:cover;object-position:50% 47%;animation:derive 26s ease-in-out infinite alternate}
+  .hero-in img{object-fit:cover;object-position:50% 36%;animation:derive 26s ease-in-out infinite alternate}
   @keyframes derive{from{transform:scale(1.02)}to{transform:scale(1.09) translateX(-1.2%)}}
   .hero-in::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,11,12,.64) 0%,rgba(11,11,12,.32) 40%,rgba(11,11,12,0) 66%)}
+  /* Grand écran : la photo à droite, le texte sur le noir à gauche (le visage de la cavalière ne passe plus sous le titre). */
+  @media(min-width:1081px){
+    .hero-in picture{position:absolute;top:0;right:0;bottom:0;width:66%}
+    .hero-in img{object-position:50% 30%}
+    .hero-in::after{background:linear-gradient(90deg,var(--noir) 34%,rgba(11,11,12,.55) 45%,rgba(11,11,12,0) 62%)}
+  }
   .hero-tx{position:absolute;z-index:2;left:max(40px,calc((100% - 1160px)/2));top:108px;color:var(--casse);max-width:660px}
   .hero-tx h1{font-size:96px;line-height:1}
   .hero-tx p{font-size:20px;line-height:1.5;margin-top:26px;max-width:500px}
@@ -229,6 +235,19 @@
   .price p{font-size:20px;color:#A3A3A7;margin:26px auto 0;max-width:580px}
   .price .stores{margin-top:38px;justify-content:center}
   .price .fine{font-size:14.5px;margin-top:18px}
+  .formules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1040px;margin:56px auto 0;text-align:left}
+  .formule{position:relative;border:1px solid var(--trait-c);border-radius:22px;padding:30px 28px 28px;display:flex;flex-direction:column;gap:6px}
+  .formule h3{font-size:26px;letter-spacing:-.02em}
+  .price .formule p{margin:0;max-width:none}
+  .price .formule .prix{font-size:16px;color:#A3A3A7;margin-top:10px}
+  .formule .prix b{font-size:40px;font-weight:600;color:var(--casse);letter-spacing:-.03em;margin-right:4px}
+  .price .formule .an{font-size:15px;color:#A3A3A7}
+  .price .formule .quoi{font-size:16px;color:var(--casse);font-weight:600;margin-top:14px;padding-top:16px;border-top:1px solid var(--trait-c)}
+  .formule ul{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15.5px;color:#A3A3A7;margin-top:6px}
+  .formule li{padding-left:20px;position:relative}
+  .formule li::before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:8px;border-radius:50%;border:1.5px solid var(--or)}
+  .bientot{position:absolute;top:24px;right:24px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--or);border:1px solid rgba(225,169,55,.5);border-radius:999px;padding:4px 10px}
+  .price .formules + .fine{margin-top:22px}
   .end{padding:0 16px}
   .end-in{position:relative;border-radius:var(--r);overflow:hidden;height:660px}
   .end-in picture,.end-in img{width:100%;height:100%}
@@ -270,7 +289,7 @@
     .lead{font-size:17px}
     .hero{padding:0 10px}
     .hero-in{height:680px}
-    .hero-in img{object-position:6% 50%}
+    .hero-in img{object-position:58% 50%}
     .hero-in::after{background:linear-gradient(180deg,rgba(11,11,12,.64),rgba(11,11,12,.2) 62%)}
     .hero-tx{left:24px;right:24px;top:44px}
     .hero-tx h1{font-size:clamp(44px,13.4vw,60px)}
@@ -326,6 +345,7 @@
     .price{padding:90px 0 80px}
     .price h2{font-size:clamp(40px,12.4vw,56px)}
     .price p{font-size:17px}
+    .formules{grid-template-columns:1fr;max-width:460px;margin-top:40px}
     .end{padding:0 10px}
     .end-in{height:560px}
     .end-in img{object-position:50% 50%}
@@ -368,9 +388,9 @@
 <section class="hero">
   <div class="hero-in">
     <picture>
-      <source type="image/webp" srcset="/assets/img/accueil-1000.webp 1000w, /assets/img/accueil-2000.webp 2000w" sizes="100vw">
-      <img src="/assets/img/accueil-2000.jpg" srcset="/assets/img/accueil-1000.jpg 1000w, /assets/img/accueil-2000.jpg 2000w" sizes="100vw"
-           width="2000" height="2500" alt="Un cavalier et son cheval au travail, dans un pré sous un ciel d'été" fetchpriority="high">
+      <source type="image/webp" srcset="/assets/img/accueil-nina-1000.webp 1000w, /assets/img/accueil-nina-2000.webp 2000w" sizes="100vw">
+      <img src="/assets/img/accueil-nina-2000.jpg" srcset="/assets/img/accueil-nina-1000.jpg 1000w, /assets/img/accueil-nina-2000.jpg 2000w" sizes="100vw"
+           width="2000" height="2500" alt="Nina Mallevaey et Dynastie de Beaufour en plein saut à Aix-la-Chapelle" fetchpriority="high">
     </picture>
     <div class="hero-tx">
       <h1>Votre com,<br>enfin simple.</h1>
@@ -593,7 +613,33 @@
   <section class="price" id="tarif">
     <div class="wrap">
       <h2 class="rv">7 jours <b>offerts.</b></h2>
-      <p class="rv d1">Puis 9,99 € par mois, ou 99,99 € par an. Sans engagement, vous arrêtez quand vous voulez.</p>
+      <p class="rv d1">Puis la formule qui vous ressemble. Sans engagement, vous arrêtez quand vous voulez.</p>
+      <div class="formules rv d2">
+        <article class="formule">
+          <h3>Cavalier</h3>
+          <p class="prix"><b>9,99 €</b> par mois</p>
+          <p class="an">ou 99,99 € par an</p>
+          <p class="quoi">2 chevaux · 1 appareil</p>
+          <ul><li>Tous les designs et la vidéo en 4K</li><li>Heures de passage et résultats en direct</li></ul>
+        </article>
+        <article class="formule">
+          <span class="bientot">Bientôt</span>
+          <h3>Pro</h3>
+          <p class="prix"><b>19,99 €</b> par mois</p>
+          <p class="an">ou 199,99 € par an</p>
+          <p class="quoi">15 chevaux · 2 appareils</p>
+          <ul><li>Les logos de vos sponsors sur vos visuels</li><li>Tout ce que comprend Cavalier</li></ul>
+        </article>
+        <article class="formule">
+          <span class="bientot">Bientôt</span>
+          <h3>Écurie</h3>
+          <p class="prix"><b>34,99 €</b> par mois</p>
+          <p class="an">ou 349,99 € par an</p>
+          <p class="quoi">Chevaux illimités · 6 comptes</p>
+          <ul><li>Vous et cinq personnes de votre choix</li><li>Tout ce que comprend Pro</li></ul>
+        </article>
+      </div>
+      <p class="fine rv d2">À l'année, deux mois offerts.</p>
       <div class="stores rv d2">
         <a class="store" href="https://apps.apple.com/fr/app/id6760648026">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
