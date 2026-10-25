@@ -21,12 +21,12 @@
     <a class="wm" href="/" aria-label="Horsevo, accueil">Hors<b>evo</b></a>
     <div class="links">
       <a href="/#stories">Stories</a>
-      <a href="/#simulateur">Essayer</a>
-      <a href="/#video">Vidéo</a>
-      <a href="/#concours">Concours</a>
-      <a href="/#tarif">Tarif</a>
+      <a href="/#simulateur" data-en="Try">Essayer</a>
+      <a href="/#video" data-en="Video">Vidéo</a>
+      <a href="/#concours" data-en="Shows">Concours</a>
+      <a href="/#tarif" data-en="Pricing">Tarif</a>
     </div>
-    <a class="btn" href="https://apps.apple.com/fr/app/id6760648026">Télécharger</a>
+    <a class="btn" href="https://apps.apple.com/fr/app/id6760648026" data-en="Download">Télécharger</a>
   </div>
 </nav>
 
@@ -34,8 +34,8 @@
 
 <header class="tete">
   <div class="wrap">
-    <h1>Adresse <span class="gold">confirmée</span></h1>
-    <p class="intro">
+    <h1 data-en='Email <span class="gold">confirmed</span>'>Adresse <span class="gold">confirmée</span></h1>
+    <p class="intro" data-en="All set, your email is confirmed. You can close this page and go back to the Horsevo app to sign in.">
       C'est bon, votre e-mail est validé. Vous pouvez fermer cette page et retourner dans
       l'application Horsevo pour vous connecter.
     </p>
@@ -45,19 +45,19 @@
 <div class="wrap corps">
 
   <section>
-    <h2><span class="num">01</span> Et maintenant ?</h2>
-    <p>
-      Ouvrez Horsevo sur votre iPhone, saisissez votre adresse et votre mot de passe, et
+    <h2 data-en='<span class="num">01</span> What now?'><span class="num">01</span> Et maintenant ?</h2>
+    <p data-en="Open Horsevo on your phone, enter your email and your password, and you are in.">
+      Ouvrez Horsevo sur votre téléphone, saisissez votre adresse et votre mot de passe, et
       vous êtes chez vous.
     </p>
-    <p>
+    <p data-en='Trouble signing in? Write to us at <a href="mailto:contact@horsevo.app?subject=Horsevo%20confirmation">contact@horsevo.app</a>, we reply within the day.'>
       Un souci pour vous connecter ? Écrivez-nous à
       <a href="mailto:contact@horsevo.app?subject=Confirmation%20Horsevo">contact@horsevo.app</a>,
       on répond dans la journée.
     </p>
   </section>
 
-  <a class="back" href="/">Retour à l'accueil</a>
+  <a class="back" href="/" data-en="Back to home">Retour à l'accueil</a>
 
 </div>
 
@@ -67,16 +67,29 @@
   <div class="wrap">
     <div>
       <div class="wm">Hors<b>evo</b></div>
-      <span class="edite">Édité par Louis Dreyfus</span>
+      <span class="edite" data-en="Published by Louis Dreyfus">Édité par Louis Dreyfus</span>
     </div>
     <div class="fl">
       <a href="/support">Support</a>
-      <a href="/confidentialite">Confidentialité</a>
-      <a href="/conditions">Mentions légales</a>
+      <a href="/confidentialite" data-en="Privacy">Confidentialité</a>
+      <a href="/conditions" data-en="Legal notice">Mentions légales</a>
       <a href="mailto:contact@horsevo.app">contact@horsevo.app</a>
     </div>
   </div>
 </footer>
+
+<script>
+/* Anglais (25 oct. 2026) : l'app en anglais ajoute ?langue=en au lien du mail ; sans lui, on suit la langue du
+   téléphone. Le français reste le texte de la page (sans script, il s'affiche tel quel). */
+(function () {
+  var q = new URLSearchParams(location.search).get("langue");
+  var en = q ? q === "en" : !/^fr/i.test(navigator.language || "fr");
+  if (!en) return;
+  document.documentElement.lang = "en";
+  document.title = "Email confirmed · Horsevo";
+  document.querySelectorAll("[data-en]").forEach(function (el) { el.innerHTML = el.getAttribute("data-en"); });
+})();
+</script>
 
 </body>
 </html>
