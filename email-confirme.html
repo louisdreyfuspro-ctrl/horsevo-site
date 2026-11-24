@@ -32,7 +32,7 @@
 
 <main>
 
-<header class="tete">
+<header class="tete" id="ok">
   <div class="wrap">
     <h1 data-en='Email <span class="gold">confirmed</span>'>Adresse <span class="gold">confirmée</span></h1>
     <p class="intro" data-en="All set, your email is confirmed. You can close this page and go back to the Horsevo app to sign in.">
@@ -42,9 +42,19 @@
   </div>
 </header>
 
+<header class="tete" id="expire" style="display:none">
+  <div class="wrap">
+    <h1 data-en='Link <span class="gold">expired</span>'>Lien <span class="gold">expiré</span></h1>
+    <p class="intro" data-en="This link no longer works: it has expired or it was already used. Don't worry, your account is safe.">
+      Ce lien ne marche plus : il a expiré ou il a déjà servi. Pas d'inquiétude, votre compte
+      n'est pas perdu.
+    </p>
+  </div>
+</header>
+
 <div class="wrap corps">
 
-  <section>
+  <section id="ok-suite">
     <h2 data-en='<span class="num">01</span> What now?'><span class="num">01</span> Et maintenant ?</h2>
     <p data-en="Open Horsevo on your phone, enter your email and your password, and you are in.">
       Ouvrez Horsevo sur votre téléphone, saisissez votre adresse et votre mot de passe, et
@@ -52,6 +62,23 @@
     </p>
     <p data-en='Trouble signing in? Write to us at <a href="mailto:contact@horsevo.app?subject=Horsevo%20confirmation">contact@horsevo.app</a>, we reply within the day.'>
       Un souci pour vous connecter ? Écrivez-nous à
+      <a href="mailto:contact@horsevo.app?subject=Confirmation%20Horsevo">contact@horsevo.app</a>,
+      on répond dans la journée.
+    </p>
+  </section>
+
+  <section id="expire-suite" style="display:none">
+    <h2 data-en='<span class="num">01</span> Try to sign in'><span class="num">01</span> Essayez de vous connecter</h2>
+    <p data-en="Open Horsevo and enter your email and your password. If it works, you are all set.">
+      Ouvrez Horsevo, saisissez votre adresse et votre mot de passe. Si ça marche, tout est bon.
+    </p>
+    <h2 data-en='<span class="num">02</span> It does not work?'><span class="num">02</span> Ça ne marche pas ?</h2>
+    <p data-en="Tap “Forgot your password?” in the app. A code arrives by email: enter it, choose a password, and your email is confirmed at the same time.">
+      Dans l'app, touchez « Mot de passe oublié ? ». Un code arrive par e-mail : saisissez-le,
+      choisissez un mot de passe, et votre adresse est confirmée en même temps.
+    </p>
+    <p data-en='Still a problem? Write to us at <a href="mailto:contact@horsevo.app?subject=Horsevo%20confirmation">contact@horsevo.app</a>, we reply within the day.'>
+      Toujours un souci ? Écrivez-nous à
       <a href="mailto:contact@horsevo.app?subject=Confirmation%20Horsevo">contact@horsevo.app</a>,
       on répond dans la journée.
     </p>
@@ -79,6 +106,17 @@
 </footer>
 
 <script>
+/* Lien expiré ou déjà servi (24 nov. 2026) : le serveur revient ici avec error / error_code dans l'adresse (#… ou ?…).
+   Avant, la page disait quand même « Adresse confirmée » : le client croyait que c'était bon et restait bloqué. */
+var lienMort = (function () {
+  var h = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+  var s = new URLSearchParams(location.search);
+  if (!(h.get("error_code") || h.get("error") || s.get("error_code") || s.get("error"))) return false;
+  ["ok", "ok-suite"].forEach(function (id) { document.getElementById(id).style.display = "none"; });
+  ["expire", "expire-suite"].forEach(function (id) { document.getElementById(id).style.display = ""; });
+  document.title = "Lien expiré · Horsevo";
+  return true;
+})();
 /* Anglais (25 oct. 2026) : l'app en anglais ajoute ?langue=en au lien du mail ; sans lui, on suit la langue du
    téléphone. Le français reste le texte de la page (sans script, il s'affiche tel quel). */
 (function () {
@@ -86,7 +124,7 @@
   var en = q ? q === "en" : !/^fr/i.test(navigator.language || "fr");
   if (!en) return;
   document.documentElement.lang = "en";
-  document.title = "Email confirmed · Horsevo";
+  document.title = lienMort ? "Link expired · Horsevo" : "Email confirmed · Horsevo";
   document.querySelectorAll("[data-en]").forEach(function (el) { el.innerHTML = el.getAttribute("data-en"); });
 })();
 </script>
